@@ -1,7 +1,7 @@
 # Личный проект «Кэндишоп» [![Build status][travis-image]][travis-url]
 
-* Студент: [Авива](https://up.htmlacademy.ru/javascript/15/user/804725).
-* Наставник: `Неизвестно`.
+* Студент: [Анастасия Трибой](https://up.htmlacademy.ru/javascript/15/user/804725).
+* Наставник: `Мария Филлипова`.
 
 ---
 
