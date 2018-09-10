@@ -63,6 +63,11 @@ var catalogCard = document.querySelector('#card')
 .content
 .querySelector('.catalog__card');
 
+// Находим шаблон goods_card для товаров в корзине
+var goodsCard = document.querySelector('#card-order')
+.content
+.querySelector('.goods_card');
+
 // Функция, генерирующая случайное число в определенном диапазоне
 var getRandomNumber = function (min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -114,7 +119,7 @@ var renderGoods = function (good) {
 
   if (good.amount > 5) {
     goodElement.classList.add('card--in-stock');
-  } else if (good.amount >= 1 || good.amount <= 5) {
+  } else if (good.amount >= 1) {
     goodElement.classList.add('card--little');
   } else if (good.amount === 0) {
     goodElement.classList.add('card--soon');
@@ -171,17 +176,20 @@ goodsCards.classList.remove('goods__cards--empty');
 var cardsEmpty = document.querySelector('.goods__card-empty');
 cardsEmpty.classList.add('visually-hidden');
 
-var fragment = document.createDocumentFragment();
+
 
 // Создаем товары и добавляем их на страницу
-var createGoods = function () {
+var appendCatalogCards = function () {
+  var fragment = document.createDocumentFragment();
+
   generateGoods(GOODS_QUANTITY);
+
   for (var i = 0; i < goods.length; i++) {
     fragment.appendChild(renderGoods(goods[i]));
   }
   catalogCards.appendChild(fragment);
 };
-createGoods();
+appendCatalogCards();
 
 // Герерируем случайные элементы для корзины из массива товаров
 var generateOrders = function (quantity) {
@@ -191,12 +199,25 @@ var generateOrders = function (quantity) {
   return goodsInCard;
 };
 
+// Функция, отрисовывающая товары в корзине на странице
+var renderOrders = function (order) {
+  var chosenGoods = goodsCard.cloneNode(true);
+
+  chosenGoods.querySelector('.card-order__title').textContent = order.name;
+  chosenGoods.querySelector('.card-order__img').src = 'img/cards/' + order.picture + '.jpg';
+  chosenGoods.querySelector('.card-order__price').textContent = order.price + ' \u20BD';
+
+  return chosenGoods;
+  };
+
 // Создаем товары в корзине и добавляем их на страницу
-var createOrders = function () {
+var appendOrderCards = function () {
   generateOrders(ORDERS_QUANTITY);
+  var fragment = document.createDocumentFragment();
   for (var i = 0; i < goodsInCard.length; i++) {
-    fragment.appendChild(renderGoods(goodsInCard[i]));
+    fragment.appendChild(renderOrders(goodsInCard[i]));
   }
-  goodsCards.appendChild(fragment);
+    goodsCards.appendChild(fragment);
 };
-createOrders();
+appendOrderCards();
+
