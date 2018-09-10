@@ -177,7 +177,6 @@ var cardsEmpty = document.querySelector('.goods__card-empty');
 cardsEmpty.classList.add('visually-hidden');
 
 
-
 // Создаем товары и добавляем их на страницу
 var appendCatalogCards = function () {
   var fragment = document.createDocumentFragment();
@@ -208,7 +207,7 @@ var renderOrders = function (order) {
   chosenGoods.querySelector('.card-order__price').textContent = order.price + ' \u20BD';
 
   return chosenGoods;
-  };
+};
 
 // Создаем товары в корзине и добавляем их на страницу
 var appendOrderCards = function () {
@@ -217,7 +216,7 @@ var appendOrderCards = function () {
   for (var i = 0; i < goodsInCard.length; i++) {
     fragment.appendChild(renderOrders(goodsInCard[i]));
   }
-    goodsCards.appendChild(fragment);
+  goodsCards.appendChild(fragment);
 };
 appendOrderCards();
 
