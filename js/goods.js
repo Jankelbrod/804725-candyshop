@@ -2,11 +2,11 @@
 
 var goods = [];
 // Товары в корзине
-var goodsInCard = [];
+// var goodsInCard = [];
 // Количество товаров
 var GOODS_QUANTITY = 26;
 // Количество товаров в корзине
-var ORDERS_QUANTITY = 3;
+// var ORDERS_QUANTITY = 3;
 
 // Количество оставшейся продукции
 var MAX_AMOUNT = 20;
@@ -195,12 +195,12 @@ var renderGoods = function (good) {
 
     // Уменьшаем кол-во товара при нажатии на кнопку
     btnDecrease.addEventListener('click', function () {
-        if (VALUE > 1) {
-          VALUE--;
-          chosenGoods.querySelector('input[name="gum-wasabi"]').value = VALUE;
-        } else {
-          goodsCards.removeChild(chosenGoods);
-        }
+      if (VALUE > 1) {
+        VALUE--;
+        chosenGoods.querySelector('input[name="gum-wasabi"]').value = VALUE;
+      } else {
+        goodsCards.removeChild(chosenGoods);
+      }
     });
 
     // Удаление товара
@@ -209,7 +209,7 @@ var renderGoods = function (good) {
       goodsCards.removeChild(chosenGoods);
     });
     return chosenGoods;
-};
+  };
   // Находим на странице кнопку добавления в избранное
   var btnFavorite = goodElement.querySelector('.card__btn-favorite');
 
@@ -221,15 +221,15 @@ var renderGoods = function (good) {
 
   // Делаем блок корзины пустым
   var clearCard = function () {
-      goodsCards.classList.remove('goods__cards--empty');
-      cardsEmpty.classList.add('visually-hidden');
+    goodsCards.classList.remove('goods__cards--empty');
+    cardsEmpty.classList.add('visually-hidden');
   };
   // Отрисовываем на странице товары в корзине
   var appendOrderCards = function () {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(renderOrders());
-  goodsCards.appendChild(fragment);
-  };
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(renderOrders());
+    goodsCards.appendChild(fragment);
+    };
 
 
   // Находим на странице кнопку добавления товара в корзину
@@ -240,11 +240,11 @@ var renderGoods = function (good) {
       cardBtn.onclick = 'return false';
       cardBtn.blur();
     } else {
-    appendOrderCards();
-    clearCard();
-  }
+      appendOrderCards();
+      clearCard();
+    }
   });
-    return goodElement;
+  return goodElement;
 };
 
 // Создаем товары и добавляем их на страницу
@@ -258,8 +258,6 @@ var appendCatalogCards = function () {
 };
 appendCatalogCards();
 
-
-
 // Герерируем случайные элементы для корзины из массива товаров
 /* var generateOrders = function (quantity) {
   for (var i = 0; i < quantity; i++) {
@@ -269,8 +267,6 @@ appendCatalogCards();
 };
 
 // Функция, отрисовывающая товары в корзине на странице
-
-
 
 // Создаем товары в корзине и добавляем их на страницу
  var appendOrderCards = function () {
