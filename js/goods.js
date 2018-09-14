@@ -229,7 +229,7 @@ var renderGoods = function (good) {
     var fragment = document.createDocumentFragment();
     fragment.appendChild(renderOrders());
     goodsCards.appendChild(fragment);
-    };
+  };
 
 
   // Находим на странице кнопку добавления товара в корзину
