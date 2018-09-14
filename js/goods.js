@@ -58,6 +58,10 @@ catalogCards.classList.remove('catalog__cards--load');
 var catalogLoad = document.querySelector('.catalog__load');
 catalogLoad.classList.add('visually-hidden');
 
+// Находим на странице блок корзины
+var goodsCards = document.querySelector('.goods__cards');
+var cardsEmpty = document.querySelector('.goods__card-empty');
+
 // Находим шаблон catalog__card для товаров
 var catalogCard = document.querySelector('#card')
 .content
@@ -117,6 +121,7 @@ var renderGoods = function (good) {
   goodElement.querySelector('.card__title').textContent = good.name;
   goodElement.querySelector('.card__img').src = 'img/cards/' + good.picture + '.jpg';
 
+  goodElement.classList.remove('card--in-stock');
   if (good.amount > 5) {
     goodElement.classList.add('card--in-stock');
   } else if (good.amount >= 1) {
@@ -165,24 +170,87 @@ var renderGoods = function (good) {
   cardWeight.textContent = '/ ' + good.weight + ' Г';
   cardPrice.appendChild(cardWeight);
 
-  return goodElement;
+  // Заполнение блока информацией о товарах в корзине
+  var renderOrders = function () {
+
+    var chosenGoods = goodsCard.cloneNode(true);
+
+    // Количество товара
+    var VALUE = 1;
+
+    // Кнопки увеличения и уменьшения количества товара в корзине
+    var btnIncrease = chosenGoods.querySelector('.card-order__btn--increase');
+    var btnDecrease = chosenGoods.querySelector('.card-order__btn--decrease');
+
+    chosenGoods.querySelector('input[name="gum-wasabi"]').value = VALUE;
+    chosenGoods.querySelector('.card-order__title').textContent = good.name;
+    chosenGoods.querySelector('.card-order__img').src = 'img/cards/' + good.picture + '.jpg';
+    chosenGoods.querySelector('.card-order__price').textContent = good.price + ' \u20BD';
+
+    // Увеличиваем кол-во товара при нажатии на кнопку
+    btnIncrease.addEventListener('click', function () {
+      VALUE++;
+      chosenGoods.querySelector('input[name="gum-wasabi"]').value = VALUE;
+    });
+
+    // Уменьшаем кол-во товара при нажатии на кнопку
+    btnDecrease.addEventListener('click', function () {
+        if (VALUE > 1) {
+          VALUE--;
+          chosenGoods.querySelector('input[name="gum-wasabi"]').value = VALUE;
+        } else {
+          goodsCards.removeChild(chosenGoods);
+        }
+    });
+
+    // Удаление товара
+    var cardOrderClose = chosenGoods.querySelector('.card-order__close');
+    cardOrderClose.addEventListener('click', function () {
+      goodsCards.removeChild(chosenGoods);
+    });
+    return chosenGoods;
 };
+  // Находим на странице кнопку добавления в избранное
+  var btnFavorite = goodElement.querySelector('.card__btn-favorite');
 
-// Удаляем класс goods__cards--empty в блоке goods__cards
-var goodsCards = document.querySelector('.goods__cards');
-goodsCards.classList.remove('goods__cards--empty');
+  // Изменение остояния кнопки добавления в избранное с активного на неактивный и наоброт
+  btnFavorite.addEventListener('click', function () {
+    btnFavorite.classList.toggle('card__btn-favorite--selected');
+    btnFavorite.blur();
+  });
 
-// Добавляем класс visually-hidden, чтобы скрыть блок goods__card-empty
-var cardsEmpty = document.querySelector('.goods__card-empty');
-cardsEmpty.classList.add('visually-hidden');
+  // Делаем блок корзины пустым
+  var clearCard = function () {
+      goodsCards.classList.remove('goods__cards--empty');
+      cardsEmpty.classList.add('visually-hidden');
+  };
+  // Отрисовываем на странице товары в корзине
+  var appendOrderCards = function () {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(renderOrders());
+  goodsCards.appendChild(fragment);
+  };
 
+
+  // Находим на странице кнопку добавления товара в корзину
+  var cardBtn = goodElement.querySelector('.card__btn');
+
+  cardBtn.addEventListener('click', function () {
+    if (good.amount === 0) {
+      cardBtn.onclick = 'return false';
+      cardBtn.blur();
+    } else {
+    appendOrderCards();
+    clearCard();
+  }
+  });
+    return goodElement;
+};
 
 // Создаем товары и добавляем их на страницу
 var appendCatalogCards = function () {
   var fragment = document.createDocumentFragment();
-
   generateGoods(GOODS_QUANTITY);
-
   for (var i = 0; i < goods.length; i++) {
     fragment.appendChild(renderGoods(goods[i]));
   }
@@ -190,8 +258,10 @@ var appendCatalogCards = function () {
 };
 appendCatalogCards();
 
+
+
 // Герерируем случайные элементы для корзины из массива товаров
-var generateOrders = function (quantity) {
+/* var generateOrders = function (quantity) {
   for (var i = 0; i < quantity; i++) {
     goodsInCard.push(goods[getRandomNumber(0, goods.length)]);
   }
@@ -199,18 +269,11 @@ var generateOrders = function (quantity) {
 };
 
 // Функция, отрисовывающая товары в корзине на странице
-var renderOrders = function (order) {
-  var chosenGoods = goodsCard.cloneNode(true);
 
-  chosenGoods.querySelector('.card-order__title').textContent = order.name;
-  chosenGoods.querySelector('.card-order__img').src = 'img/cards/' + order.picture + '.jpg';
-  chosenGoods.querySelector('.card-order__price').textContent = order.price + ' \u20BD';
 
-  return chosenGoods;
-};
 
 // Создаем товары в корзине и добавляем их на страницу
-var appendOrderCards = function () {
+ var appendOrderCards = function () {
   generateOrders(ORDERS_QUANTITY);
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < goodsInCard.length; i++) {
@@ -218,5 +281,5 @@ var appendOrderCards = function () {
   }
   goodsCards.appendChild(fragment);
 };
-appendOrderCards();
+appendOrderCards(); */
 
