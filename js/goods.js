@@ -105,15 +105,6 @@ var getOriginalElement = function (elements, data) {
   elements.push(element);
   return element;
 };
-var bla = function (arr, elem) {
-  var element = elem;
-  if (arr.includes(element)) {
-    goodsAmount++;
-  } else {
-    arr.push(element);
-  }
-  return element;
-};
 
 // Функция, гененрирующая массив товаров
 var generateGoods = function (quantity) {
