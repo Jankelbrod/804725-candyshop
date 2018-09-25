@@ -319,10 +319,10 @@ var addGoodInBasket = function (index) {
   var goodsElement = goodsCards.querySelectorAll('.goods_card');
 
   for (var i = 0; i < goodsElement.length; i++) {
-  var name = goodsElement[i].querySelector('.card-order__title').textContent;
-  if (goodInBasket.name === name) {
-    changeGoodAmount(goodsInCard[i], 1, goodsElement[i]);
-    return;
+    var name = goodsElement[i].querySelector('.card-order__title').textContent;
+    if (goodInBasket.name === name) {
+      changeGoodAmount(goodsInCard[i], 1, goodsElement[i]);
+      return;
     }
   }
   totalAmount++;
