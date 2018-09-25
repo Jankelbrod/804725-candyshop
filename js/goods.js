@@ -115,7 +115,7 @@ var generateContent = function (arr) {
 
 var getOriginalElement = function (elements, data) {
   var element = getRandomElement(data);
-  while (elements.includes(element)) {
+  while (elements.indexOf(element) !== -1) {
     element = getRandomElement(data);
   }
   elements.push(element);
@@ -208,22 +208,17 @@ var checkBasket = function () {
   }
 };
 
-var changeGoodAmount = function (element, quantity, node) {
-  if (quantity > 0) {
-    element.amount++;
-    totalAmount++;
-    document.querySelector('.card-order__count').value = element.amount;
+var changeGoodAmount = function (good, amount, element) {
+  totalAmount = totalAmount + amount;
+  good.amount = good.amount + amount;
+
+  var selector = 'input[name="' + good.picture + '"]';
+  element.querySelector(selector).value = good.amount;
+
+  if (good.amount === 0) {
+    goodsCards.removeChild(element);
   }
-  if (quantity < 0) {
-    if (totalAmount > 1) {
-      element.amount--;
-      totalAmount--;
-      document.querySelector('.card-order__count').value = element.amount;
-    } else {
-      totalAmount = 0;
-      node.parentNode.removeChild(node);
-    }
-  }
+
   checkBasket();
 };
 
@@ -321,8 +316,14 @@ var addGoodInBasket = function (index) {
     price: goods[index].price,
     amount: 1
   };
-  if (goodsInCard.indexOf(goods[index].name) !== -1) {
-    changeGoodAmount(goodInBasket, 1, null);
+  var goodsElement = goodsCards.querySelectorAll('.goods_card');
+
+  for (var i = 0; i < goodsElement.length; i++) {
+  var name = goodsElement[i].querySelector('.card-order__title').textContent;
+  if (goodInBasket.name === name) {
+    changeGoodAmount(goodsInCard[i], 1, goodsElement[i]);
+    return;
+    }
   }
   totalAmount++;
   goodsInCard.push(goodInBasket);
