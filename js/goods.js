@@ -322,7 +322,7 @@ var addGoodInBasket = function (index) {
     amount: 1
   };
   if (goodsInCard.indexOf(goods[index].name) !== -1) {
-      changeGoodAmount(goodInBasket, 1, null);
+    changeGoodAmount(goodInBasket, 1, null);
   }
   totalAmount++;
   goodsInCard.push(goodInBasket);
