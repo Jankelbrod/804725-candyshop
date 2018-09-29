@@ -81,7 +81,7 @@ var rangePrices = document.querySelector('.range__prices');
 var rangePriceMax = rangePrices.querySelector('.range__price--max');
 var rangePriceMin = rangePrices.querySelector('.range__price--min');
 
-//Находим на странице поле оформления заказа
+// Находим на странице поле оформления заказа
 var orderField = document.querySelector('#order');
 
 // Контактные данные
@@ -420,25 +420,23 @@ var moon = function (input) {
   var inputValue = getValue(input);
   var arr = [];
   inputValue = inputValue.split('');
-  if (inputValue.length > 0) {
-  for(var i = 0; i < inputValue.length; i++) {
-    if(i % 2 === 0) {
-      var m = parseInt(inputValue[i]) * 2;
-      if(m > 9) {
+  for (var i = 0; i < inputValue.length; i++) {
+    if (i % 2 === 0) {
+      var m = parseInt(inputValue[i], 10) * 2;
+      if (m > 9) {
         arr.push(m - 9);
       } else {
         arr.push(m);
       }
     } else {
-        var n = parseInt(inputValue[i]);
-        arr.push(n)
-      }
+      var n = parseInt(inputValue[i], 10);
+      arr.push(n);
     }
-    var sum = arr.reduce(function(a, b) { return a + b; });
-    return Boolean(!(sum % 10));
-  } else {
-    return;
   }
+    var sum = arr.reduce(function (a, b) {
+      return a + b;
+    });
+    return Boolean(!(sum % 10));
 };
 
 // Проверка введенного номера карты
@@ -455,10 +453,10 @@ cardCvc.addEventListener('blur', function () {
   if (isNaN(getValue(cardCvc))) {
     cardCvc.setCustomValidity('Поле должно содержать только числа');
   } else if (getValue(cardCvc) < 100) {
-      cardCvc.setCustomValidity('Диапазон значений должен быть от 100 до 999');
-    } else {
-        cardCvc.setCustomValidity('');
-      }
+    cardCvc.setCustomValidity('Диапазон значений должен быть от 100 до 999');
+  } else {
+    cardCvc.setCustomValidity('');
+  }
 });
 
 // Проверка введенного этажа
@@ -466,8 +464,8 @@ deliverFloor.addEventListener('blur', function () {
   if (isNaN(getValue(deliverFloor))) {
     deliverFloor.setCustomValidity('Поле должно содержать только числа');
   } else {
-      deliverFloor.setCustomValidity('');
-    }
+    deliverFloor.setCustomValidity('');
+  }
 });
 
 
