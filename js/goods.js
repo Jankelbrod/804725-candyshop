@@ -84,9 +84,6 @@ var rangePriceMin = rangePrices.querySelector('.range__price--min');
 // Находим на странице поле оформления заказа
 var orderField = document.querySelector('#order');
 
-// Контактные данные
-var contactData = orderField.querySelector('.contact-data');
-
 // Доставка
 var deliver = orderField.querySelector('.deliver');
 var deliverCourier = deliver.querySelector('.deliver__courier');
