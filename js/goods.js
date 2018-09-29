@@ -81,10 +81,25 @@ var rangePrices = document.querySelector('.range__prices');
 var rangePriceMax = rangePrices.querySelector('.range__price--max');
 var rangePriceMin = rangePrices.querySelector('.range__price--min');
 
-// Находим на странице кнопки способа доставки
-var deliver = document.querySelector('.deliver__toggle');
-var deliverStore = document.querySelector('.deliver__store');
-var deliverCourier = document.querySelector('.deliver__courier');
+//Находим на странице поле оформления заказа
+var orderField = document.querySelector('#order');
+
+// Контактные данные
+var contactData = orderField.querySelector('.contact-data');
+
+// Доставка
+var deliver = orderField.querySelector('.deliver');
+var deliverCourier = deliver.querySelector('.deliver__courier');
+var deliverStore = deliver.querySelector('.deliver__stores');
+var deliverFloor = deliver.querySelector('#deliver__floor');
+
+// Оплата
+var payment = orderField.querySelector('.payment');
+var paymentCash = payment.querySelector('.payment__cash-wrap');
+var paymentCard = payment.querySelector('.payment__card-wrap');
+var cardNumber = payment.querySelector('#payment__card-number');
+var cardCvc = payment.querySelector('#payment__card-cvc');
+
 
 // Находим шаблон catalog__card для товаров
 var catalogCardTemplate = document.querySelector('#card')
@@ -191,23 +206,35 @@ var appendCardWeight = function (weight, element) {
   cardWeight.textContent = '/ ' + weight + ' Г';
   element.appendChild(cardWeight);
 };
-
 // Делаем блок корзины пустым
 var clearCard = function () {
   goodsCards.classList.remove('goods__cards--empty');
   cardsEmpty.classList.add('visually-hidden');
 };
+
+// Отключаем/включаем поле оформления заказа
+var disableField = function (element, isDisable) {
+  var inputs = element.querySelectorAll('input');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].disabled = isDisable;
+  }
+};
+
+// Проверяем корзину на наличие товаров
 var checkBasket = function () {
   if (totalAmount > 0) {
     document.querySelector('.main-header__basket').textContent = 'Количество товаров в корзине: ' + totalAmount;
+    disableField(orderField, false);
+    disableField(deliverCourier, true);
     clearCard();
   } else {
     goodsCards.classList.add('goods__cards--empty');
     cardsEmpty.classList.remove('visually-hidden');
+    disableField(orderField, true);
     document.querySelector('.main-header__basket').textContent = 'В корзине ничего нет';
   }
 };
-
+// Изменение количества товара в корзине
 var changeGoodAmount = function (good, amount, element) {
   totalAmount = totalAmount + amount;
   good.amount = good.amount + amount;
@@ -218,10 +245,9 @@ var changeGoodAmount = function (good, amount, element) {
   if (good.amount === 0) {
     goodsCards.removeChild(element);
   }
-
   checkBasket();
 };
-
+// Удаление товара из корзины
 var deleteGoodFromBasket = function (evt) {
   evt.preventDefault();
   var target = evt.target;
@@ -245,19 +271,33 @@ var getGoodIndex = function (target) {
   var goodName = target.querySelector('.card__title').textContent;
   return usedNames.indexOf(goodName);
 };
-
+// Добавление/удаление из избранного
 var toggleFavoriteClass = function (element) {
   element.classList.toggle('card__btn-favorite--selected');
   element.blur();
 };
-
+// Переключение способа доставки
 var toggleDelivery = function (evt) {
   if (evt.target.id === 'deliver__courier') {
     deliverCourier.classList.remove('visually-hidden');
     deliverStore.classList.add('visually-hidden');
+    disableField(deliverCourier, false);
   } else if (evt.target.id === 'deliver__store') {
     deliverStore.classList.remove('visually-hidden');
     deliverCourier.classList.add('visually-hidden');
+    disableField(deliverCourier, true);
+  }
+};
+// Переключение способа оплаты
+var togglePayment = function (evt) {
+  if (evt.target.id === 'payment__cash') {
+    paymentCash.classList.remove('visually-hidden');
+    paymentCard.classList.add('visually-hidden');
+    disableField(paymentCard, true);
+  } else if (evt.target.id === 'payment__card') {
+    paymentCard.classList.remove('visually-hidden');
+    paymentCash.classList.add('visually-hidden');
+    disableField(paymentCard, false);
   }
 };
 
@@ -279,7 +319,7 @@ var renderGood = function (good) {
 
   appendCardCurrency(cardPrice);
   appendCardWeight(good.weight, cardPrice);
-
+  checkBasket();
   return goodElement;
 };
 
@@ -355,8 +395,9 @@ var appendCatalogCards = function () {
 };
 appendCatalogCards();
 
-// Переключение способов доставки по клику
+// Переключение способов доставки и оплаты по клику
 deliver.addEventListener('click', toggleDelivery);
+payment.addEventListener('click', togglePayment);
 
 rangeBtnRight.addEventListener('mouseup', function (upEvt) {
   upEvt.preventDefault();
@@ -367,3 +408,66 @@ rangeBtnLeft.addEventListener('mouseup', function (upEvt) {
   upEvt.preventDefault();
   rangePriceMin.textContent = upEvt.clientX;
 });
+
+// Получаем значение инпута
+var getValue = function (input) {
+  var inputValue = input.value;
+  return inputValue;
+};
+
+// Валидация номера карты
+var moon = function (input) {
+  var inputValue = getValue(input);
+  var arr = [];
+  inputValue = inputValue.split('');
+  if (inputValue.length > 0) {
+  for(var i = 0; i < inputValue.length; i++) {
+    if(i % 2 === 0) {
+      var m = parseInt(inputValue[i]) * 2;
+      if(m > 9) {
+        arr.push(m - 9);
+      } else {
+        arr.push(m);
+      }
+    } else {
+        var n = parseInt(inputValue[i]);
+        arr.push(n)
+      }
+    }
+    var sum = arr.reduce(function(a, b) { return a + b; });
+    return Boolean(!(sum % 10));
+  } else {
+    return;
+  }
+};
+
+// Проверка введенного номера карты
+cardNumber.addEventListener('blur', function (evt) {
+  if (moon(cardNumber) === false) {
+    evt.target.setCustomValidity('Введен неверный номер');
+  } else {
+    evt.target.setCustomValidity('');
+  }
+});
+
+// Проверка CVC
+cardCvc.addEventListener('blur', function () {
+  if (isNaN(getValue(cardCvc))) {
+    cardCvc.setCustomValidity('Поле должно содержать только числа');
+  } else if (getValue(cardCvc) < 100) {
+      cardCvc.setCustomValidity('Диапазон значений должен быть от 100 до 999');
+    } else {
+        cardCvc.setCustomValidity('');
+      }
+});
+
+// Проверка введенного этажа
+deliverFloor.addEventListener('blur', function () {
+  if (isNaN(getValue(deliverFloor))) {
+    deliverFloor.setCustomValidity('Поле должно содержать только числа');
+  } else {
+      deliverFloor.setCustomValidity('');
+    }
+});
+
+
