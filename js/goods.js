@@ -430,10 +430,10 @@ var moon = function (input) {
       arr.push(n);
     }
   }
-    var sum = arr.reduce(function (a, b) {
-      return a + b;
-    });
-    return Boolean(!(sum % 10));
+  var sum = arr.reduce(function (a, b) {
+    return a + b;
+  });
+  return Boolean(!(sum % 10));
 };
 
 // Проверка введенного номера карты
