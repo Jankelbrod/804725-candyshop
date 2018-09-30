@@ -87,7 +87,7 @@ var orderField = document.querySelector('#order');
 // Доставка
 var deliver = orderField.querySelector('.deliver');
 var deliverCourier = deliver.querySelector('.deliver__courier');
-var deliverStore = deliver.querySelector('.deliver__stores');
+var deliverStore = deliver.querySelector('.deliver__store');
 var deliverFloor = deliver.querySelector('#deliver__floor');
 
 // Оплата
@@ -96,7 +96,9 @@ var paymentCash = payment.querySelector('.payment__cash-wrap');
 var paymentCard = payment.querySelector('.payment__card-wrap');
 var cardNumber = payment.querySelector('#payment__card-number');
 var cardCvc = payment.querySelector('#payment__card-cvc');
-
+var cardholder = payment.querySelector('#payment__cardholder');
+var cardDate = payment.querySelector('#payment__card-date');
+var cardStatus = payment.querySelector('.payment__card-status');
 
 // Находим шаблон catalog__card для товаров
 var catalogCardTemplate = document.querySelector('#card')
@@ -406,6 +408,14 @@ rangeBtnLeft.addEventListener('mouseup', function (upEvt) {
   rangePriceMin.textContent = upEvt.clientX;
 });
 
+// Изменение карты при выборе станции метро
+var choseMapImg = function (evt) {
+  var storeMapImage = deliver.querySelector('.deliver__store-map-img');
+  if (evt.target.name === 'store') {
+  storeMapImage.src = 'img/map/' + evt.target.value + '.jpg';
+  }
+};
+
 // Получаем значение инпута
 var getValue = function (input) {
   var inputValue = input.value;
@@ -413,7 +423,7 @@ var getValue = function (input) {
 };
 
 // Валидация номера карты
-var moon = function (input) {
+var checkCardValidity = function (input) {
   var inputValue = getValue(input);
   var arr = [];
   inputValue = inputValue.split('');
@@ -436,13 +446,26 @@ var moon = function (input) {
   return Boolean(!(sum % 10));
 };
 
-// Проверка введенного номера карты
-cardNumber.addEventListener('blur', function (evt) {
-  if (moon(cardNumber) === false) {
-    evt.target.setCustomValidity('Введен неверный номер');
+// Проверка статусы карты
+var checkCardStatus = function () {
+  var number = cardNumber.checkValidity();
+  var cvc = cardCvc.checkValidity();
+  var name = cardholder.checkValidity();
+  var date = cardDate.checkValidity();
+  if (number && cvc && name && date) {
+    cardStatus.textContent = "Определен";
   } else {
-    evt.target.setCustomValidity('');
+    cardStatus.textContent = "Не определен";
   }
+};
+// Проверка введенного номера карты
+cardNumber.addEventListener('blur', function () {
+  if (checkCardValidity(cardNumber) === false) {
+    cardNumber.setCustomValidity('Введен неверный номер');
+  } else {
+    cardNumber.setCustomValidity('');
+  }
+  checkCardStatus();
 });
 
 // Проверка CVC
@@ -454,7 +477,15 @@ cardCvc.addEventListener('blur', function () {
   } else {
     cardCvc.setCustomValidity('');
   }
+  checkCardStatus();
 });
+
+cardholder.addEventListener('blur', function () {
+  checkCardStatus();
+});
+cardDate.addEventListener('blur', function () {
+  checkCardStatus();
+})
 
 // Проверка введенного этажа
 deliverFloor.addEventListener('blur', function () {
@@ -465,4 +496,4 @@ deliverFloor.addEventListener('blur', function () {
   }
 });
 
-
+deliverStore.addEventListener('click', choseMapImg);
