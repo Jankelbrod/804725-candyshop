@@ -412,7 +412,7 @@ rangeBtnLeft.addEventListener('mouseup', function (upEvt) {
 var choseMapImg = function (evt) {
   var storeMapImage = deliver.querySelector('.deliver__store-map-img');
   if (evt.target.name === 'store') {
-  storeMapImage.src = 'img/map/' + evt.target.value + '.jpg';
+    storeMapImage.src = 'img/map/' + evt.target.value + '.jpg';
   }
 };
 
@@ -453,9 +453,9 @@ var checkCardStatus = function () {
   var name = cardholder.checkValidity();
   var date = cardDate.checkValidity();
   if (number && cvc && name && date) {
-    cardStatus.textContent = "Определен";
+    cardStatus.textContent = 'Определен';
   } else {
-    cardStatus.textContent = "Не определен";
+    cardStatus.textContent = 'Не определен';
   }
 };
 // Проверка введенного номера карты
@@ -485,7 +485,7 @@ cardholder.addEventListener('blur', function () {
 });
 cardDate.addEventListener('blur', function () {
   checkCardStatus();
-})
+});
 
 // Проверка введенного этажа
 deliverFloor.addEventListener('blur', function () {
