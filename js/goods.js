@@ -495,11 +495,11 @@ rangeFilter.addEventListener('mousedown', function (evt) {
   var moveLimit = rangeFilter.offsetWidth;
 
   var getNewCoords = function (btn1, btn2, shiftX) {
-    var newCoordsX = (btn1.offsetLeft - shiftX)/moveLimit * 100;
+    var newCoordsX = (btn1.offsetLeft - shiftX) / moveLimit * 100;
     if (newCoordsX < 0) {
       newCoordsX = 0;
-    } else if (newCoordsX > (btn2.offsetLeft - shiftX)/moveLimit * 100) {
-      newCoordsX = (btn2.offsetLeft - shiftX)/moveLimit * 100;
+    } else if (newCoordsX > (btn2.offsetLeft - shiftX) / moveLimit * 100) {
+      newCoordsX = (btn2.offsetLeft - shiftX) / moveLimit * 100;
     }
     return Math.round(newCoordsX);
   };
@@ -526,7 +526,7 @@ rangeFilter.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-  }
+  };
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
