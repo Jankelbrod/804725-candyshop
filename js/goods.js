@@ -73,13 +73,13 @@ var cardsEmpty = goodsCards.querySelector('.goods__card-empty');
 
 // Кнопки ползунка
 var rangeFilter = document.querySelector('.range__filter');
+var rangeFillLine = rangeFilter.querySelector('.range__fill-line');
 var rangeBtnRight = rangeFilter.querySelector('.range__btn--right');
 var rangeBtnLeft = rangeFilter.querySelector('.range__btn--left');
 
-// Диапазон цен
 var rangePrices = document.querySelector('.range__prices');
-var rangePriceMax = rangePrices.querySelector('.range__price--max');
 var rangePriceMin = rangePrices.querySelector('.range__price--min');
+var rangePriceMax = rangePrices.querySelector('.range__price--max');
 
 // Находим на странице поле оформления заказа
 var orderField = document.querySelector('#order');
@@ -398,16 +398,6 @@ appendCatalogCards();
 deliver.addEventListener('click', toggleDelivery);
 payment.addEventListener('click', togglePayment);
 
-rangeBtnRight.addEventListener('mouseup', function (upEvt) {
-  upEvt.preventDefault();
-  rangePriceMax.textContent = upEvt.clientX;
-});
-
-rangeBtnLeft.addEventListener('mouseup', function (upEvt) {
-  upEvt.preventDefault();
-  rangePriceMin.textContent = upEvt.clientX;
-});
-
 // Изменение карты при выборе станции метро
 var choseMapImg = function (evt) {
   var storeMapImage = deliver.querySelector('.deliver__store-map-img');
@@ -453,7 +443,7 @@ var checkCardStatus = function () {
   var name = cardholder.checkValidity();
   var date = cardDate.checkValidity();
   if (number && cvc && name && date) {
-    cardStatus.textContent = 'Определен';
+    cardStatus.textContent = 'Одобрен';
   } else {
     cardStatus.textContent = 'Не определен';
   }
@@ -497,3 +487,46 @@ deliverFloor.addEventListener('blur', function () {
 });
 
 deliverStore.addEventListener('click', choseMapImg);
+
+rangeFilter.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoordsX = evt.clientX;
+  var moveLimit = rangeFilter.offsetWidth;
+
+  var getNewCoords = function (btn1, btn2, shiftX) {
+    var newCoordsX = (btn1.offsetLeft - shiftX)/moveLimit * 100;
+    if (newCoordsX < 0) {
+      newCoordsX = 0;
+    } else if (newCoordsX > (btn2.offsetLeft - shiftX)/moveLimit * 100) {
+      newCoordsX = (btn2.offsetLeft - shiftX)/moveLimit * 100;
+    }
+    return Math.round(newCoordsX);
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shiftX = startCoordsX - moveEvt.clientX;
+    startCoordsX = moveEvt.clientX;
+    var newCoords;
+
+    if (evt.target === rangeBtnLeft) {
+      newCoords = getNewCoords(rangeBtnLeft, rangeBtnRight, shiftX);
+      rangeBtnLeft.style.left = newCoords + '%';
+      rangeFillLine.style.left = newCoords + '%';
+      rangePriceMin.textContent = newCoords;
+    } else if (evt.target === rangeBtnRight) {
+      newCoords = getNewCoords(rangeBtnRight, rangeBtnLeft, shiftX);
+      rangeBtnRight.style.right = newCoords + '%';
+      rangeFillLine.style.right = newCoords + '%';
+      rangePriceMax.textContent = newCoords;
+    }
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
