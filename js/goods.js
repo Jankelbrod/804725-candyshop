@@ -488,45 +488,78 @@ deliverFloor.addEventListener('blur', function () {
 
 deliverStore.addEventListener('click', choseMapImg);
 
-rangeFilter.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
+var getPriceValue = function (coordX) {
+return Math.floor(coordX * (MAX_PRICE - MIN_PRICE) / rangeFilter.offsetWidth) + MIN_PRICE;
+};
 
-  var startCoordsX = evt.clientX;
-  var moveLimit = rangeFilter.offsetWidth;
-
-  var getNewCoords = function (btn1, btn2, shiftX) {
-    var newCoordsX = (btn1.offsetLeft - shiftX) / moveLimit * 100;
-    if (newCoordsX < 0) {
-      newCoordsX = 0;
-    } else if (newCoordsX > (btn2.offsetLeft - shiftX) / moveLimit * 100) {
-      newCoordsX = (btn2.offsetLeft - shiftX) / moveLimit * 100;
+var getNewCoordX = function (btn, coordX) {
+  if (btn === rangeBtnLeft) {
+    if (coordX < 0) {
+      coordX = 0;
     }
-    return Math.round(newCoordsX);
-  };
-  var onMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
+    if (coordX > rangeBtnRight.offsetLeft) {
+      coordX = rangeBtnRight.offsetLeft;
+    }
+  }
+  if (btn === rangeBtnRight) {
+    if (coordX > rangeFilter.offsetWidth) {
+      coordX = rangeFilter.offsetWidth;
+    }
+    if (coordX < rangeBtnLeft.offsetLeft + rangeBtnLeft.offsetWidth) {
+      coordX = rangeBtnLeft.offsetLeft + rangeBtnLeft.offsetWidth;
+    }
+  }
+  return coordX;
+};
 
-    var shiftX = startCoordsX - moveEvt.clientX;
-    startCoordsX = moveEvt.clientX;
-    var newCoords;
+var onPinMouseDown = function (evtDown) {
+  evtDown.preventDefault();
 
-    if (evt.target === rangeBtnLeft) {
-      newCoords = getNewCoords(rangeBtnLeft, rangeBtnRight, shiftX);
-      rangeBtnLeft.style.left = newCoords + '%';
-      rangeFillLine.style.left = newCoords + '%';
-      rangePriceMin.textContent = newCoords;
-    } else if (evt.target === rangeBtnRight) {
-      newCoords = getNewCoords(rangeBtnRight, rangeBtnLeft, shiftX);
-      rangeBtnRight.style.right = newCoords + '%';
-      rangeFillLine.style.right = newCoords + '%';
-      rangePriceMax.textContent = newCoords;
+  var startCoordX = evtDown.clientX;
+  var maxCoordX = rangeFilter.offsetWidth;
+
+  var onMouseMove = function (evtMove) {
+    evtMove.preventDefault();
+
+    var shiftX = startCoordX - evtMove.clientX;
+    var newCoordX = startCoordX - rangeFilter.offsetLeft - shiftX;
+
+    if (evtDown.target === rangeBtnLeft) {
+      newCoordX = getNewCoordX(rangeBtnLeft, newCoordX);
+      evtDown.target.style.left = newCoordX - rangeBtnRight.offsetWidth + 'px';
+      rangeFillLine.style.left = newCoordX + 'px';
+      rangePriceMin.textContent = getPriceValue(newCoordX);
+    }
+
+    if (evtDown.target === rangeBtnRight) {
+      newCoordX = getNewCoordX(rangeBtnRight, newCoordX);
+      evtDown.target.style.right = maxCoordX - newCoordX - rangeBtnLeft.offsetWidth +'px';
+      rangeFillLine.style.right = maxCoordX - newCoordX + 'px';
+      rangePriceMax.textContent = getPriceValue(newCoordX);
     }
   };
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
+
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-});
+};
+
+rangeBtnLeft.addEventListener('mousedown', onPinMouseDown);
+rangeBtnRight.addEventListener('mousedown', onPinMouseDown);
+
+
+/*
+var getNewCoords = function (btn1, btn2, shiftX) {
+  var newCoordsX = (btn1.offsetLeft - shiftX) / moveLimit * 100;
+  if (newCoordsX < 0) {
+    newCoordsX = 0;
+  } else if (newCoordsX > (btn2.offsetLeft - shiftX) / moveLimit * 100) {
+    newCoordsX = (btn2.offsetLeft - shiftX) / moveLimit * 100;
+  }
+  return Math.round(newCoordsX);
+};
+*/
