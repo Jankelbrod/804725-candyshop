@@ -489,7 +489,7 @@ deliverFloor.addEventListener('blur', function () {
 deliverStore.addEventListener('click', choseMapImg);
 
 var getPriceValue = function (coordX) {
-return Math.floor(coordX * (MAX_PRICE - MIN_PRICE) / rangeFilter.offsetWidth) + MIN_PRICE;
+  return Math.floor(coordX * (MAX_PRICE - MIN_PRICE) / rangeFilter.offsetWidth) + MIN_PRICE;
 };
 
 var getNewCoordX = function (btn, coordX) {
@@ -533,7 +533,7 @@ var onPinMouseDown = function (evtDown) {
 
     if (evtDown.target === rangeBtnRight) {
       newCoordX = getNewCoordX(rangeBtnRight, newCoordX);
-      evtDown.target.style.right = maxCoordX - newCoordX - rangeBtnLeft.offsetWidth +'px';
+      evtDown.target.style.right = maxCoordX - newCoordX - rangeBtnLeft.offsetWidth + 'px';
       rangeFillLine.style.right = maxCoordX - newCoordX + 'px';
       rangePriceMax.textContent = getPriceValue(newCoordX);
     }
