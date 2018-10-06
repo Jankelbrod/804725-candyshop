@@ -73,13 +73,13 @@ var cardsEmpty = goodsCards.querySelector('.goods__card-empty');
 
 // Кнопки ползунка
 var rangeFilter = document.querySelector('.range__filter');
+var rangeFillLine = rangeFilter.querySelector('.range__fill-line');
 var rangeBtnRight = rangeFilter.querySelector('.range__btn--right');
 var rangeBtnLeft = rangeFilter.querySelector('.range__btn--left');
 
-// Диапазон цен
 var rangePrices = document.querySelector('.range__prices');
-var rangePriceMax = rangePrices.querySelector('.range__price--max');
 var rangePriceMin = rangePrices.querySelector('.range__price--min');
+var rangePriceMax = rangePrices.querySelector('.range__price--max');
 
 // Находим на странице поле оформления заказа
 var orderField = document.querySelector('#order');
@@ -398,16 +398,6 @@ appendCatalogCards();
 deliver.addEventListener('click', toggleDelivery);
 payment.addEventListener('click', togglePayment);
 
-rangeBtnRight.addEventListener('mouseup', function (upEvt) {
-  upEvt.preventDefault();
-  rangePriceMax.textContent = upEvt.clientX;
-});
-
-rangeBtnLeft.addEventListener('mouseup', function (upEvt) {
-  upEvt.preventDefault();
-  rangePriceMin.textContent = upEvt.clientX;
-});
-
 // Изменение карты при выборе станции метро
 var choseMapImg = function (evt) {
   var storeMapImage = deliver.querySelector('.deliver__store-map-img');
@@ -453,7 +443,7 @@ var checkCardStatus = function () {
   var name = cardholder.checkValidity();
   var date = cardDate.checkValidity();
   if (number && cvc && name && date) {
-    cardStatus.textContent = 'Определен';
+    cardStatus.textContent = 'Одобрен';
   } else {
     cardStatus.textContent = 'Не определен';
   }
@@ -497,3 +487,79 @@ deliverFloor.addEventListener('blur', function () {
 });
 
 deliverStore.addEventListener('click', choseMapImg);
+
+var getPriceValue = function (coordX) {
+  return Math.floor(coordX * (MAX_PRICE - MIN_PRICE) / rangeFilter.offsetWidth) + MIN_PRICE;
+};
+
+var getNewCoordX = function (btn, coordX) {
+  if (btn === rangeBtnLeft) {
+    if (coordX < 0) {
+      coordX = 0;
+    }
+    if (coordX > rangeBtnRight.offsetLeft) {
+      coordX = rangeBtnRight.offsetLeft;
+    }
+  }
+  if (btn === rangeBtnRight) {
+    if (coordX > rangeFilter.offsetWidth) {
+      coordX = rangeFilter.offsetWidth;
+    }
+    if (coordX < rangeBtnLeft.offsetLeft + rangeBtnLeft.offsetWidth) {
+      coordX = rangeBtnLeft.offsetLeft + rangeBtnLeft.offsetWidth;
+    }
+  }
+  return coordX;
+};
+
+var onPinMouseDown = function (evtDown) {
+  evtDown.preventDefault();
+
+  var startCoordX = evtDown.clientX;
+  var maxCoordX = rangeFilter.offsetWidth;
+
+  var onMouseMove = function (evtMove) {
+    evtMove.preventDefault();
+
+    var shiftX = startCoordX - evtMove.clientX;
+    var newCoordX = startCoordX - rangeFilter.offsetLeft - shiftX;
+
+    if (evtDown.target === rangeBtnLeft) {
+      newCoordX = getNewCoordX(rangeBtnLeft, newCoordX);
+      evtDown.target.style.left = newCoordX - rangeBtnRight.offsetWidth + 'px';
+      rangeFillLine.style.left = newCoordX + 'px';
+      rangePriceMin.textContent = getPriceValue(newCoordX);
+    }
+
+    if (evtDown.target === rangeBtnRight) {
+      newCoordX = getNewCoordX(rangeBtnRight, newCoordX);
+      evtDown.target.style.right = maxCoordX - newCoordX - rangeBtnLeft.offsetWidth + 'px';
+      rangeFillLine.style.right = maxCoordX - newCoordX + 'px';
+      rangePriceMax.textContent = getPriceValue(newCoordX);
+    }
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+rangeBtnLeft.addEventListener('mousedown', onPinMouseDown);
+rangeBtnRight.addEventListener('mousedown', onPinMouseDown);
+
+
+/*
+var getNewCoords = function (btn1, btn2, shiftX) {
+  var newCoordsX = (btn1.offsetLeft - shiftX) / moveLimit * 100;
+  if (newCoordsX < 0) {
+    newCoordsX = 0;
+  } else if (newCoordsX > (btn2.offsetLeft - shiftX) / moveLimit * 100) {
+    newCoordsX = (btn2.offsetLeft - shiftX) / moveLimit * 100;
+  }
+  return Math.round(newCoordsX);
+};
+*/
