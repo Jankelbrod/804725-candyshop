@@ -188,7 +188,7 @@
 
   catalogCards.addEventListener('click', checkOnCatalogClick);
 
-    // Создаем товары и добавляем их на страницу
+  // Создаем товары и добавляем их на страницу
   var appendCatalogCards = function () {
     var fragment = document.createDocumentFragment();
     generateGoods(GOODS_QUANTITY);

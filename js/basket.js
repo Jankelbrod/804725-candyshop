@@ -19,17 +19,17 @@
   // Проверяем корзину на наличие товаров
   window.basket = {
     checkBasket: function () {
-    if (totalAmount > 0) {
-      document.querySelector('.main-header__basket').textContent = 'Количество товаров в корзине: ' + totalAmount;
-      window.util.disableField(window.order.orderField, false);
-      window.util.disableField(window.order.deliverCourier, true);
-      clearCard();
-    } else {
-      goodsCards.classList.add('goods__cards--empty');
-      cardsEmpty.classList.remove('visually-hidden');
-      window.util.disableField(window.order.orderField, true);
-      document.querySelector('.main-header__basket').textContent = 'В корзине ничего нет';
-    }
+      if (totalAmount > 0) {
+        document.querySelector('.main-header__basket').textContent = 'Количество товаров в корзине: ' + totalAmount;
+        window.util.disableField(window.order.orderField, false);
+        window.util.disableField(window.order.deliverCourier, true);
+        clearCard();
+      } else {
+        goodsCards.classList.add('goods__cards--empty');
+        cardsEmpty.classList.remove('visually-hidden');
+        window.util.disableField(window.order.orderField, true);
+        document.querySelector('.main-header__basket').textContent = 'В корзине ничего нет';
+      }
     },
     addGoodInBasket: function (index) {
       var goodInBasket = {
@@ -52,7 +52,7 @@
       goodsCards.appendChild(renderOrder(goodInBasket));
       window.basket.checkBasket();
     }
-};
+  };
   // Изменение количества товара в корзине
   var changeGoodAmount = function (good, amount, element) {
     totalAmount = totalAmount + amount;

@@ -34,5 +34,5 @@
       elements.push(element);
       return element;
     }
-  }
+  };
 })();
