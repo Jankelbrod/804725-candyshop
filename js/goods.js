@@ -176,7 +176,7 @@
 
     appendCardCurrency(cardPrice);
     appendCardWeight(good.weight, cardPrice);
-    window.basket.check;
+    window.basket.check();
     return goodElement;
   };
 
@@ -210,8 +210,6 @@
   };
 
 })();
-
-
 
 /*
 var getNewCoords = function (btn1, btn2, shiftX) {

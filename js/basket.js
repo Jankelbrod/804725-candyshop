@@ -31,7 +31,7 @@
       cardsEmpty.classList.remove('visually-hidden');
       window.util.disableField(window.order.field, true);
       document.querySelector('.main-header__basket').textContent = 'В корзине ничего нет';
-      }
+    }
   };
   var addGoodInBasket = function (index) {
     var goodInBasket = {
@@ -39,7 +39,7 @@
       picture: window.util.goods[index].picture,
       price: window.util.goods[index].price,
       amount: 1
-    }
+    };
     var goodsElement = goodsCards.querySelectorAll('.goods_card');
 
     for (var i = 0; i < goodsElement.length; i++) {
@@ -106,7 +106,7 @@
   };
 
   window.basket = {
-    check: checkBasket(),
+    check: checkBasket,
     addGood: addGoodInBasket
   };
 

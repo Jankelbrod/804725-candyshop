@@ -2,11 +2,11 @@
 
 (function () {
 
-  var orderField = document.querySelector('#order')
+  var orderField = document.querySelector('#order');
   // Доставка
   var deliver = orderField.querySelector('.deliver');
   var deliverStore = deliver.querySelector('.deliver__store');
-  var deliverCourier = deliver.querySelector('.deliver__courier')
+  var deliverCourier = deliver.querySelector('.deliver__courier');
   var deliverFloor = deliver.querySelector('#deliver__floor');
 
   // Оплата
