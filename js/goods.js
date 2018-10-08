@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   // Использованные названия
   var usedNames = [];
   // Использованные изображения
@@ -10,6 +11,10 @@
   // Количество оставшейся продукции
   var MAX_AMOUNT = 20;
   var MIN_AMOUNT = 0;
+
+  // Цена
+  var MAX_PRICE = 1500;
+  var MIN_PRICE = 100;
 
   // Вес
   var MAX_WEIGHT = 300;
@@ -72,7 +77,7 @@
         name: window.util.getOriginalElement(usedNames, NAMES),
         picture: window.util.getOriginalElement(usedPictures, PICTURES),
         amount: window.util.getRandomNumber(MIN_AMOUNT, MAX_AMOUNT),
-        price: window.util.getRandomNumber(window.util.MIN_PRICE, window.util.MAX_PRICE),
+        price: window.util.getRandomNumber(MIN_PRICE, MAX_PRICE),
         weight: window.util.getRandomNumber(MIN_WEIGHT, MAX_WEIGHT),
         rating: {
           value: window.util.getRandomNumber(MIN_VALUE, MAX_VALUE),
@@ -171,7 +176,7 @@
 
     appendCardCurrency(cardPrice);
     appendCardWeight(good.weight, cardPrice);
-    window.basket.checkBasket();
+    window.basket.check;
     return goodElement;
   };
 
@@ -179,7 +184,7 @@
     evt.preventDefault();
     var target = evt.target;
     if (target.className === 'card__btn') {
-      window.basket.addGoodInBasket(getGoodIndex(target));
+      window.basket.addGood(getGoodIndex(target));
     }
     if (target.classList.contains('card__btn-favorite')) {
       toggleFavoriteClass(target);
@@ -198,7 +203,15 @@
     catalogCards.appendChild(fragment);
   };
   appendCatalogCards();
+
+  window.goods = {
+    priceMin: MIN_PRICE,
+    priceMax: MAX_PRICE
+  };
+
 })();
+
+
 
 /*
 var getNewCoords = function (btn1, btn2, shiftX) {

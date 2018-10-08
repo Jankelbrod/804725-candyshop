@@ -2,17 +2,15 @@
 
 (function () {
 
-  window.order = {
-    orderField: document.querySelector('#order'),
-    deliverCourier: document.querySelector('.deliver__courier')
-  };
+  var orderField = document.querySelector('#order')
   // Доставка
-  var deliver = window.order.orderField.querySelector('.deliver');
+  var deliver = orderField.querySelector('.deliver');
   var deliverStore = deliver.querySelector('.deliver__store');
+  var deliverCourier = deliver.querySelector('.deliver__courier')
   var deliverFloor = deliver.querySelector('#deliver__floor');
 
   // Оплата
-  var payment = window.order.orderField.querySelector('.payment');
+  var payment = orderField.querySelector('.payment');
   var paymentCash = payment.querySelector('.payment__cash-wrap');
   var paymentCard = payment.querySelector('.payment__card-wrap');
   var cardNumber = payment.querySelector('#payment__card-number');
@@ -20,17 +18,19 @@
   var cardholder = payment.querySelector('#payment__cardholder');
   var cardDate = payment.querySelector('#payment__card-date');
   var cardStatus = payment.querySelector('.payment__card-status');
+  // var paymentError = payment.querySelector('.payment__error-message');
+
 
   // Переключение способа доставки
   var toggleDelivery = function (evt) {
     if (evt.target.id === 'deliver__courier') {
-      window.order.deliverCourier.classList.remove('visually-hidden');
+      deliverCourier.classList.remove('visually-hidden');
       deliverStore.classList.add('visually-hidden');
-      window.util.disableField(window.order.deliverCourier, false);
+      window.util.disableField(deliverCourier, false);
     } else if (evt.target.id === 'deliver__store') {
       deliverStore.classList.remove('visually-hidden');
-      window.order.deliverCourier.classList.add('visually-hidden');
-      window.util.disableField(window.order.deliverCourier, true);
+      deliverCourier.classList.add('visually-hidden');
+      window.util.disableField(deliverCourier, true);
     }
   };
   // Переключение способа оплаты
@@ -45,6 +45,7 @@
       window.util.disableField(paymentCard, false);
     }
   };
+
     // Изменение карты при выборе станции метро
   var choseMapImg = function (evt) {
     var storeMapImage = deliver.querySelector('.deliver__store-map-img');
@@ -136,4 +137,10 @@
   // Переключение способов доставки и оплаты по клику
   deliver.addEventListener('click', toggleDelivery);
   payment.addEventListener('click', togglePayment);
+
+  window.order = {
+    field: orderField,
+    courier: deliverCourier
+  };
+
 })();

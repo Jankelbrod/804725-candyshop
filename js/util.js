@@ -5,11 +5,6 @@
   window.util = {
 
     goods: [],
-    goodsInCard: [],
-
-    MAX_PRICE: 1500,
-    MIN_PRICE: 100,
-
     // Отключаем/включаем поле оформления заказа
     disableField: function (element, isDisable) {
       var inputs = element.querySelectorAll('input');

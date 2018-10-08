@@ -13,7 +13,7 @@
   var rangePriceMax = rangePrices.querySelector('.range__price--max');
 
   var getPriceValue = function (coordX) {
-    return Math.floor(coordX * (window.util.MAX_PRICE - window.util.MIN_PRICE) / rangeFilter.offsetWidth) + window.util.MIN_PRICE;
+    return Math.floor(coordX * (window.goods.priceMax - window.goods.priceMin) / rangeFilter.offsetWidth) + window.goods.priceMin;
   };
 
   var getNewCoordX = function (btn, coordX) {
