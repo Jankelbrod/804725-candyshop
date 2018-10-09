@@ -91,7 +91,7 @@
     if (isSuccess) {
       success.classList.remove('modal--hidden');
       error.classList.add('modal--hidden');
-    } else if (isSuccess == false) {
+    } else if (isSuccess === false) {
       success.classList.add('modal--hidden');
       error.classList.remove('modal--hidden');
     }

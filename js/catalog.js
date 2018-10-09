@@ -17,13 +17,6 @@
   .content
   .querySelector('.catalog__card');
 
-  // Функция, генерирующая случайный состав товара и преобразующая его в строку
-  var generateContent = function (arr) {
-    var copy = arr.slice();
-    copy.length = window.util.getRandomNumber(1, arr.length);
-    return copy.join(', ');
-  };
-
   // Количество осташихся товаров
   var setAmountClass = function (amount, element) {
     element.classList.remove('card--in-stock');
@@ -139,7 +132,7 @@
   var successHandler = function (data) {
     window.util.goods = data;
     for (var i = 0; i < window.util.goods.length; i++) {
-    usedNames.push(window.util.goods[i].name);
+      usedNames.push(window.util.goods[i].name);
     }
     appendOnCatalog(window.util.goods);
   };
