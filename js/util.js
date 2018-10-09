@@ -3,7 +3,6 @@
 (function () {
 
   window.util = {
-
     goods: [],
     // Отключаем/включаем поле оформления заказа
     disableField: function (element, isDisable) {
