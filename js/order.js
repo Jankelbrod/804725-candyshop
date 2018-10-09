@@ -19,6 +19,8 @@
   var cardDate = payment.querySelector('#payment__card-date');
   var cardStatus = payment.querySelector('.payment__card-status');
   // var paymentError = payment.querySelector('.payment__error-message');
+  var error = document.querySelector('.modal--error');
+  var success = document.querySelector('.modal--success');
 
   var form = document.querySelector('.buy__submit-btn');
 
@@ -141,10 +143,15 @@
 
 
   form.addEventListener('submit', function (evt) {
-    window.save(new FormData(form), function () {
-      refreshFields()
-    }, errorHandler);
     evt.preventDefault();
+    window.save(new FormData(form), function () {
+      refreshFields();
+      success.classList.remove('modal--hidden');
+      error.classList.add('modal--hidden');
+    }, function () {
+      success.classList.add('modal--hidden');
+      error.classList.remove('modal--hidden');
+    });
   });
 
   var refreshFields = function () {

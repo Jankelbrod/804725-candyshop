@@ -128,7 +128,7 @@
   catalogCards.addEventListener('click', checkOnCatalogClick);
 
   // Создаем товары и добавляем их на страницу
-  window.render = function (data) {
+  var appendOnCatalog = function (data) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
       fragment.appendChild(renderGood(data[i]));
@@ -141,14 +141,13 @@
     for (var i = 0; i < window.util.goods.length; i++) {
     usedNames.push(window.util.goods[i].name)
     }
-    window.render(window.util.goods);
+    appendOnCatalog(window.util.goods);
   };
   var errorHandler = function (errorMassage) {
     alert(errorMassage);
   };
 
   window.load(successHandler, errorHandler);
-
 })();
 
 /*
