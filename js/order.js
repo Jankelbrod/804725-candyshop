@@ -87,6 +87,16 @@
     return Boolean(!(sum % 10));
   };
 
+  var toggleModal = function (isSuccess) {
+    if (isSuccess) {
+      success.classList.remove('modal--hidden');
+      error.classList.add('modal--hidden');
+    } else if (isSuccess == false) {
+      success.classList.add('modal--hidden');
+      error.classList.remove('modal--hidden');
+    }
+  };
+
   // Проверка статусы карты
   var checkCardStatus = function () {
     var number = cardNumber.checkValidity();
@@ -99,6 +109,7 @@
       cardStatus.textContent = 'Не определен';
     }
   };
+
   // Проверка введенного номера карты
   cardNumber.addEventListener('blur', function () {
     if (checkCardValidity(cardNumber) === false) {
@@ -146,25 +157,24 @@
     evt.preventDefault();
     window.save(new FormData(form), function () {
       refreshFields();
-      success.classList.remove('modal--hidden');
-      error.classList.add('modal--hidden');
+      toggleModal(true);
     }, function () {
-      success.classList.add('modal--hidden');
-      error.classList.remove('modal--hidden');
+      toggleModal(false);
     });
   });
 
   var refreshFields = function () {
-      var input = orderField.querySelectorAll('input');
-      for (var i = 0; i < input.legth; i++) {
-        input[i].value = '';
-      }
-      deliverCourier.querySelector('.deliver__textarea').value = '';
-    };
+    var input = orderField.querySelectorAll('input');
+    for (var i = 0; i < input.legth; i++) {
+      input[i].value = '';
+    }
+    deliverCourier.querySelector('.deliver__textarea').value = '';
+  };
 
   window.order = {
     field: orderField,
     courier: deliverCourier,
-    form: form
+    form: form,
+    toggleModal: toggleModal
   };
 })();

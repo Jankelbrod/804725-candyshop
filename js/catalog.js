@@ -139,12 +139,13 @@
   var successHandler = function (data) {
     window.util.goods = data;
     for (var i = 0; i < window.util.goods.length; i++) {
-    usedNames.push(window.util.goods[i].name)
+    usedNames.push(window.util.goods[i].name);
     }
     appendOnCatalog(window.util.goods);
   };
   var errorHandler = function (errorMassage) {
-    alert(errorMassage);
+    window.order.toggleModal(false);
+    document.querySelector('.modal__message').textContent = errorMassage;
   };
 
   window.load(successHandler, errorHandler);
