@@ -2,41 +2,49 @@
 
 (function () {
 
-  var URL_SAVE = 'https://js.dump.academy/candyshop';
+  var URL_GET = 'https://js.dump.academy/candyshop/data';
+  var URL_POST = 'https://js.dump.academy/candyshop';
+  var SUCCESS_CODE = 200;
+  var TIMEOUT = 10000;
 
-  var getStatus = function (xhr, load, error) {
+  var createRequest = function (onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.responseType = 'json';
+
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        load(xhr.response);
+      if (xhr.status === SUCCESS_CODE) {
+        onLoad(xhr.response);
       } else {
-        error('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
     xhr.addEventListener('error', function () {
-      error('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      error('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
+
+    xhr.timeout = TIMEOUT;
+    return xhr;
   };
 
-  window.load = function (onLoad, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    getStatus(xhr, onLoad, onError);
-    xhr.timeout = 10000;
-    xhr.open('GET', window.url);
+  var load = function (onLoad, onError) {
+    var xhr = createRequest(onLoad, onError);
+    xhr.open('GET', URL_GET);
     xhr.send();
   };
 
-  window.save = function (data, onLoad, onError) {
+  var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    getStatus(xhr, onLoad, onError);
-    xhr.timeout = 10000;
-    xhr.open('POST', URL_SAVE);
+    var xhr = createRequest(onLoad, onError);
+    xhr.open('POST', URL_POST);
     xhr.send(data);
   };
 
-  window.url = 'https://js.dump.academy/candyshop/data';
+  window.backend = {
+    load: load,
+    save: save
+  };
 })();

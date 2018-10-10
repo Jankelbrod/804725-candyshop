@@ -19,8 +19,6 @@
   var cardDate = payment.querySelector('#payment__card-date');
   var cardStatus = payment.querySelector('.payment__card-status');
   // var paymentError = payment.querySelector('.payment__error-message');
-  var error = document.querySelector('.modal--error');
-  var success = document.querySelector('.modal--success');
 
   var form = document.querySelector('.buy__submit-btn');
 
@@ -87,14 +85,12 @@
     return Boolean(!(sum % 10));
   };
 
-  var toggleModal = function (isSuccess) {
-    if (isSuccess) {
-      success.classList.remove('modal--hidden');
-      error.classList.add('modal--hidden');
-    } else if (isSuccess === false) {
-      success.classList.add('modal--hidden');
-      error.classList.remove('modal--hidden');
+  var refreshFields = function () {
+    var input = orderField.querySelectorAll('input');
+    for (var i = 0; i < input.legth; i++) {
+      input[i].value = '';
     }
+    deliverCourier.querySelector('.deliver__textarea').value = '';
   };
 
   // Проверка статусы карты
@@ -152,29 +148,23 @@
   deliver.addEventListener('click', toggleDelivery);
   payment.addEventListener('click', togglePayment);
 
+  var onSuccess = function () {
+    window.catalog.modal(true);
+    refreshFields();
+  };
+  var onError = function (errorMassage) {
+    window.catalog.modal(false);
+    document.querySelector('.modal__message').textContent = errorMassage;
+  };
 
   form.addEventListener('submit', function (evt) {
+    window.save(new FormData(form), onSuccess, onError);
     evt.preventDefault();
-    window.save(new FormData(form), function () {
-      refreshFields();
-      toggleModal(true);
-    }, function () {
-      toggleModal(false);
-    });
   });
-
-  var refreshFields = function () {
-    var input = orderField.querySelectorAll('input');
-    for (var i = 0; i < input.legth; i++) {
-      input[i].value = '';
-    }
-    deliverCourier.querySelector('.deliver__textarea').value = '';
-  };
 
   window.order = {
     field: orderField,
     courier: deliverCourier,
     form: form,
-    toggleModal: toggleModal
   };
 })();
