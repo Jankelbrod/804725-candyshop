@@ -144,20 +144,20 @@
   var closeModal = function (evt) {
     evt.preventDefault();
     if (modalClose[0]) {
-    error.classList.add('modal--hidden');
+      error.classList.add('modal--hidden');
     } else if (modalClose[1]) {
       success.classList.add('modal--hidden');
     }
   };
-  for (var i = 0; i < modalClose.length; i++){
-  modalClose[i].addEventListener('click', closeModal);
-  };
+  for (var i = 0; i < modalClose.length; i++) {
+    modalClose[i].addEventListener('click', closeModal);
+  }
 
   window.backend.load(onSuccess, onError);
 
   window.catalog = {
     modal: toggleModal
-  }
+  };
 
 })();
 

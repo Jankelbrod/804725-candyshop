@@ -38,7 +38,7 @@
 
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
-    var xhr = createRequest(onLoad, onError);
+    xhr = createRequest(onLoad, onError);
     xhr.open('POST', URL_POST);
     xhr.send(data);
   };
