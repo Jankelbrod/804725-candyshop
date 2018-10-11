@@ -20,7 +20,8 @@
   var cardStatus = payment.querySelector('.payment__card-status');
   // var paymentError = payment.querySelector('.payment__error-message');
 
-  var form = document.querySelector('.buy__submit-btn');
+  var buy = document.querySelector('.buy');
+  var form = buy.querySelector('form');
 
   // Переключение способа доставки
   var toggleDelivery = function (evt) {
@@ -149,17 +150,19 @@
   payment.addEventListener('click', togglePayment);
 
   var onSuccess = function () {
-    window.catalog.modal(true);
+    window.catalog.toggleModal(true);
+    window.catalog.closeModal();
     refreshFields();
   };
   var onError = function (errorMassage) {
-    window.catalog.modal(false);
+    window.catalog.toggleModal(false);
     document.querySelector('.modal__message').textContent = errorMassage;
+    window.catalog.closeModal();
   };
 
   form.addEventListener('submit', function (evt) {
-    window.save(new FormData(form), onSuccess, onError);
     evt.preventDefault();
+    window.backend.save(new FormData(), onSuccess, onError);
   });
 
   window.order = {

@@ -16,7 +16,7 @@
 
   var error = document.querySelector('.modal--error');
   var success = document.querySelector('.modal--success');
-  var modalClose = document.querySelectorAll('.modal__close');
+  var modal = document.querySelectorAll('.modal__close');
 
   // Количество осташихся товаров
   var setAmountClass = function (amount, element) {
@@ -128,6 +128,16 @@
       error.classList.remove('modal--hidden');
     }
   };
+var closeModal = function () {
+  for (var i = 0; i < modal.length; i++) {
+    modal[0].addEventListener('click', function () {
+      error.classList.add('modal--hidden');
+    });
+    modal[1].addEventListener('click', function () {
+      success.classList.add('modal--hidden');
+    });
+  }
+};
   var onSuccess = function (data) {
     window.util.goods = data;
     for (var i = 0; i < window.util.goods.length; i++) {
@@ -140,24 +150,14 @@
     toggleModal(false);
     catalogLoad.classList.remove('visually-hidden');
     document.querySelector('.modal__message').textContent = errorMassage;
+    closeModal();
   };
-  var closeModal = function (evt) {
-    evt.preventDefault();
-    if (modalClose[0]) {
-      error.classList.add('modal--hidden');
-    } else if (modalClose[1]) {
-      success.classList.add('modal--hidden');
-    }
-  };
-  for (var i = 0; i < modalClose.length; i++) {
-    modalClose[i].addEventListener('click', closeModal);
-  }
 
   window.backend.load(onSuccess, onError);
 
   window.catalog = {
-    modal: toggleModal
+    toggleModal: toggleModal,
+    closeModal: closeModal,
   };
 
 })();
-
