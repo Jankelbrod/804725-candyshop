@@ -3,7 +3,6 @@
 (function () {
 
   var goodsInCard = [];
-
   // Общее кол-во товаров в корзине
   var totalAmount = 0;
   // Находим шаблон goods_card для товаров в корзине
@@ -19,40 +18,22 @@
     goodsCards.classList.remove('goods__cards--empty');
     cardsEmpty.classList.add('visually-hidden');
   };
+
   // Проверяем корзину на наличие товаров
   var checkBasket = function () {
     if (totalAmount > 0) {
       document.querySelector('.main-header__basket').textContent = 'Количество товаров в корзине: ' + totalAmount;
       window.util.disableField(window.order.field, false);
       window.util.disableField(window.order.courier, true);
+      window.order.form.disabled = false;
       clearCard();
     } else {
       goodsCards.classList.add('goods__cards--empty');
       cardsEmpty.classList.remove('visually-hidden');
       window.util.disableField(window.order.field, true);
+      window.order.form.disabled = true;
       document.querySelector('.main-header__basket').textContent = 'В корзине ничего нет';
     }
-  };
-  var addGoodInBasket = function (index) {
-    var goodInBasket = {
-      name: window.util.goods[index].name,
-      picture: window.util.goods[index].picture,
-      price: window.util.goods[index].price,
-      amount: 1
-    };
-    var goodsElement = goodsCards.querySelectorAll('.goods_card');
-
-    for (var i = 0; i < goodsElement.length; i++) {
-      var name = goodsElement[i].querySelector('.card-order__title').textContent;
-      if (goodInBasket.name === name) {
-        changeGoodAmount(goodsInCard[i], 1, goodsElement[i]);
-        return;
-      }
-    }
-    totalAmount++;
-    goodsInCard.push(goodInBasket);
-    goodsCards.appendChild(renderOrder(goodInBasket));
-    checkBasket();
   };
   // Изменение количества товара в корзине
   var changeGoodAmount = function (good, amount, element) {
@@ -90,7 +71,7 @@
     chosenGoods.querySelector('input').value = order.amount;
     chosenGoods.querySelector('input').id = 'card-order__' + order.name;
     chosenGoods.querySelector('.card-order__title').textContent = order.name;
-    chosenGoods.querySelector('.card-order__img').src = 'img/cards/' + order.picture + '.jpg';
+    chosenGoods.querySelector('.card-order__img').src = 'img/cards/' + order.picture;
     chosenGoods.querySelector('.card-order__img').alt = order.name;
     chosenGoods.querySelector('.card-order__price').textContent = order.price + ' \u20BD';
 
@@ -105,9 +86,30 @@
     return chosenGoods;
   };
 
+  var addGoodInBasket = function (index) {
+    var goodInBasket = {
+      name: window.util.goods[index].name,
+      picture: window.util.goods[index].picture,
+      price: window.util.goods[index].price,
+      amount: 1
+    };
+
+    var goodsElement = goodsCards.querySelectorAll('.goods_card');
+    for (var i = 0; i < goodsElement.length; i++) {
+      var name = goodsElement[i].querySelector('.card-order__title').textContent;
+      if (goodInBasket.name === name) {
+        changeGoodAmount(goodsInCard[i], 1, goodsElement[i]);
+        return;
+      }
+    }
+    totalAmount++;
+    goodsInCard.push(goodInBasket);
+    goodsCards.appendChild(renderOrder(goodInBasket));
+    checkBasket();
+  };
+
   window.basket = {
     check: checkBasket,
     addGood: addGoodInBasket
   };
-
 })();

@@ -20,6 +20,8 @@
   var cardStatus = payment.querySelector('.payment__card-status');
   // var paymentError = payment.querySelector('.payment__error-message');
 
+  var buy = document.querySelector('.buy');
+  var form = buy.querySelector('form');
 
   // Переключение способа доставки
   var toggleDelivery = function (evt) {
@@ -84,6 +86,14 @@
     return Boolean(!(sum % 10));
   };
 
+  var refreshFields = function () {
+    var input = orderField.querySelectorAll('input');
+    for (var i = 0; i < input.legth; i++) {
+      input[i].value = '';
+    }
+    deliverCourier.querySelector('.deliver__textarea').value = '';
+  };
+
   // Проверка статусы карты
   var checkCardStatus = function () {
     var number = cardNumber.checkValidity();
@@ -96,6 +106,7 @@
       cardStatus.textContent = 'Не определен';
     }
   };
+
   // Проверка введенного номера карты
   cardNumber.addEventListener('blur', function () {
     if (checkCardValidity(cardNumber) === false) {
@@ -138,9 +149,25 @@
   deliver.addEventListener('click', toggleDelivery);
   payment.addEventListener('click', togglePayment);
 
-  window.order = {
-    field: orderField,
-    courier: deliverCourier
+  var onSuccess = function () {
+    window.catalog.toggleModal(true);
+    window.catalog.closeModal();
+    refreshFields();
+  };
+  var onError = function (errorMassage) {
+    window.catalog.toggleModal(false);
+    document.querySelector('.modal__message').textContent = errorMassage;
+    window.catalog.closeModal();
   };
 
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(), onSuccess, onError);
+  });
+
+  window.order = {
+    field: orderField,
+    courier: deliverCourier,
+    form: form,
+  };
 })();
