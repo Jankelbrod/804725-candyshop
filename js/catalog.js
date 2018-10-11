@@ -129,14 +129,12 @@
     }
   };
   var closeModal = function () {
-    for (var i = 0; i < modal.length; i++) {
       modal[0].addEventListener('click', function () {
         error.classList.add('modal--hidden');
       });
       modal[1].addEventListener('click', function () {
         success.classList.add('modal--hidden');
       });
-    }
   };
   var onSuccess = function (data) {
     window.util.goods = data;
@@ -157,7 +155,9 @@
 
   window.catalog = {
     toggleModal: toggleModal,
-    closeModal: closeModal
+    closeModal: closeModal,
+    append: appendOnCatalog,
+    render: renderGood
   };
 
 })();

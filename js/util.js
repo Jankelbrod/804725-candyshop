@@ -2,8 +2,19 @@
 
 (function () {
 
+  var DEBOUNCE_INTERVAL = 500;
+  var lastTimeout;
+
   window.util = {
+
     goods: [],
+
+    debounce: function (functionToDebounce) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(functionToDebounce, DEBOUNCE_INTERVAL);
+    },
     // Отключаем/включаем поле оформления заказа
     disableField: function (element, isDisable) {
       var inputs = element.querySelectorAll('input');
