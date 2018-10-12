@@ -77,12 +77,13 @@
 
     filterSpan[8].textContent = '(' + window.catalog.favorite.length + ')';
     filterSpan[9].textContent = '(' + inStock.length + ')';
-    };
-
+  };
+  /*
   var resetCheckbox = function () {
     var inputCheckbox = document.querySelectorAll('.input-btn__input--checkbox');
     inputCheckbox.forEach(function (it) {
       it.checked = false;
     });
   };
+  */
 })();

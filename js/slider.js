@@ -39,10 +39,6 @@
     return coordX;
   };
 
-  function addFilterPrice(minPrice, maxPrice) {
-    arrFilterSort.prices[window.data.MIN_INDEX] = minPrice;
-    arrFilterSort.prices[window.data.MAX_INDEX] = maxPrice;
-  }
 
   rangeBtnRight.style.right = MIN_PRICE - rangeBtnRight.offsetWidth + 'px';
   rangeBtnLeft.style.left = MIN_PRICE + 'px';
