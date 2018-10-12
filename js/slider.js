@@ -5,6 +5,10 @@
   var MAX_PRICE = 90;
   var MIN_PRICE = 0;
 
+  var min;
+  var max;
+  var minMaxRange;
+
   // Кнопки ползунка
   var rangeFilter = document.querySelector('.range__filter');
   var rangeFillLine = rangeFilter.querySelector('.range__fill-line');
@@ -39,11 +43,14 @@
     return coordX;
   };
 
+  var startCoords = function () {
+    rangeBtnRight.style.right = MIN_PRICE - rangeBtnRight.offsetWidth + 'px';
+    rangeBtnLeft.style.left = MIN_PRICE + 'px';
+    rangeFillLine.style.right = MIN_PRICE + 'px';
+    rangeFillLine.style.left = MIN_PRICE + 'px';
+  }
 
-  rangeBtnRight.style.right = MIN_PRICE - rangeBtnRight.offsetWidth + 'px';
-  rangeBtnLeft.style.left = MIN_PRICE + 'px';
-  rangeFillLine.style.right = MIN_PRICE + 'px';
-  rangeFillLine.style.left = MIN_PRICE + 'px';
+  startCoords();
 
   var onPinMouseDown = function (evtDown) {
     evtDown.preventDefault();
@@ -62,7 +69,7 @@
         evtDown.target.style.left = newCoordX - rangeBtnRight.offsetWidth + 'px';
         rangeFillLine.style.left = newCoordX + 'px';
         rangePriceMin.textContent = getPriceValue(newCoordX);
-        window.filterSort.prices = getPriceValue(newCoordX);
+        min = getPriceValue(newCoordX);
       }
 
       if (evtDown.target === rangeBtnRight) {
@@ -70,14 +77,17 @@
         evtDown.target.style.right = maxCoordX - newCoordX - rangeBtnLeft.offsetWidth + 'px';
         rangeFillLine.style.right = maxCoordX - newCoordX + 'px';
         rangePriceMax.textContent = getPriceValue(newCoordX);
+        max = getPriceValue(newCoordX);
       }
+
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      window.filter();
+      window.filter.price(max, min);
+      window.filter.count();
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -89,4 +99,8 @@
 
   rangeBtnLeft.addEventListener('mousedown', onPinMouseDown);
   rangeBtnRight.addEventListener('mousedown', onPinMouseDown);
+
+  window.slider = {
+    start: startCoords,
+  }
 })();

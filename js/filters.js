@@ -8,33 +8,19 @@
   var catalogSideBar = document.querySelector('.catalog__sidebar');
   var filterSpan = catalogSideBar.querySelectorAll('.input-btn__item-count');
   /*
-  var filterIcecream = catalogSideBar.querySelector('#filter-icecream');
-  var filterSoda = catalogSideBar.querySelector('#filter-soda');
-  var filterGum = catalogSideBar.querySelector('#filter-gum');
-  var filterMarmalade = catalogSideBar.querySelector('#filter-marmalade');
-  var filterMarshmallows = catalogSideBar.querySelector('#filter-marshmallows');
-  // Property
-  var filterSugarFree = catalogSideBar.querySelector('#filter-sugar-free');
-  var filterVegetarian = catalogSideBar.querySelector('#filter-vegetarian');
-  var filterGlutenFree = catalogSideBar.querySelector('#filter-gluten-free');
   // Fav & avail.
   var filterFavorite = catalogSideBar.querySelector('#filter-favorite');
   var filterАvailability = catalogSideBar.querySelector('#filter-availability');
   // Sort
+  var filterCountPrice = document.querySelector('.range__price-count > .range__count');
   var filterPopular = document.querySelector('#filter-popular');
   var filterExpencive = document.querySelector('#filter-expensive');
   var filterCheep = document.querySelector('#filter-cheep');
   var filterRating = document.querySelector('#filter-rating');
+
+  var showAll = document.querySelector('.catalog__submit');
   */
-
-  window.filterSort = {
-    kinds: [],
-    nutritionFacts: {},
-    prices: [],
-    sorts: ''
-  };
-
-  window.filter = function () {
+  var filterCount = function () {
 
     var icecream = window.util.goods.filter(function (good) {
       return good.kind === 'Мороженое';
@@ -78,7 +64,30 @@
     filterSpan[8].textContent = '(' + window.catalog.favorite.length + ')';
     filterSpan[9].textContent = '(' + inStock.length + ')';
   };
+
+
+  var getPrice = function (max, min) {
+    var rangePrice = window.util.goods.filter(function (good) {
+      return good.price <= max && good.price >= min;
+      filterCountPrice.textContent = '(' + rangePrice.length + ')';
+    });
+  };
+
+  var filterSort = {
+    kinds: [],
+    nutritionFacts: {},
+    prices: [],
+    sorts: ''
+  };
+
   /*
+  var deleteFilters = function () {
+    filterSort.kinds = [];
+    filterSort.nutritionFacts = {};
+    filterSort.prices = [];
+    filterSort.sort = '';
+  };
+
   var resetCheckbox = function () {
     var inputCheckbox = document.querySelectorAll('.input-btn__input--checkbox');
     inputCheckbox.forEach(function (it) {
@@ -86,4 +95,10 @@
     });
   };
   */
+  window.filter = {
+    count: filterCount,
+    sort: filterSort,
+    price: getPrice
+  };
+
 })();

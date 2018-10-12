@@ -18,6 +18,21 @@
   var success = document.querySelector('.modal--success');
   var modal = document.querySelectorAll('.modal__close');
 
+  var catalogSideBar = document.querySelector('.catalog__sidebar');
+
+  var filterIcecream = catalogSideBar.querySelector('#filter-icecream');
+  var filterSoda = catalogSideBar.querySelector('#filter-soda');
+  var filterGum = catalogSideBar.querySelector('#filter-gum');
+  var filterMarmalade = catalogSideBar.querySelector('#filter-marmalade');
+  var filterMarshmallows = catalogSideBar.querySelector('#filter-marshmallows');
+
+  var filterSugarFree = catalogSideBar.querySelector('#filter-sugar-free');
+  var filterVegetarian = catalogSideBar.querySelector('#filter-vegetarian');
+  var filterGlutenFree = catalogSideBar.querySelector('#filter-gluten-free');
+
+  var filterExpencive = document.querySelector('#filter-expensive');
+  var filterCheep = document.querySelector('#filter-cheep');
+
   var favorites = [];
 
   // Количество осташихся товаров
@@ -105,7 +120,7 @@
     element.blur();
     if (element.classList.contains('card__btn-favorite--selected')) {
       favorites.push(element);
-      window.filter();
+      window.filter.count();
     } else {
       favorites = [];
     }
@@ -131,6 +146,19 @@
     }
     catalogCards.appendChild(fragment);
   };
+
+  var cleanCatalog = function () {
+    while (catalogCards.firstChild) {
+      catalogCards.removeChild(catalogCards.firstChild);
+    }
+  };
+
+  var removeFromCatalog = function () {
+    while (catalogCards.firstChild) {
+      catalogCards.removeChild(catalogCards.firstChild);
+    }
+  };
+
   var toggleModal = function (isSuccess) {
     if (isSuccess) {
       success.classList.remove('modal--hidden');
@@ -152,10 +180,48 @@
     window.util.goods = data;
     for (var i = 0; i < window.util.goods.length; i++) {
       usedNames.push(window.util.goods[i].name);
+      window.filter.sort.prices.push(window.util.goods[i].price);
+      window.filter.sort.prices.sort(function (a, b) {
+        return a - b;
+      });
     }
-    window.filter();
+    window.filter.count();
     appendOnCatalog(window.util.goods);
     catalogLoad.classList.add('visually-hidden');
+  };
+
+  var getFilters = function (evt) {
+    if (evt.target=== filterIcecream) {
+      var icecream = window.util.goods.filter(function (good) {
+        return good.kind === 'Мороженое';
+      });
+      cleanCatalog();
+      appendOnCatalog(icecream);
+    } else if (evt.target === filterSoda) {
+      var soda = window.util.goods.filter(function (good) {
+        return good.kind === 'Газировка';
+      });
+      cleanCatalog();
+      appendOnCatalog(soda);
+    } else if (evt.target === filterGum) {
+      var gum = window.util.goods.filter(function (good) {
+        return good.kind === 'Жевательная резинка';
+      });
+      cleanCatalog();
+      appendOnCatalog(gum);
+    } else if (evt.target === filterMarmalade) {
+        var marmalade = window.util.goods.filter(function (good) {
+          return good.kind === 'Мармелад';
+        });
+      cleanCatalog();
+      appendOnCatalog(marmalade);
+    } else if (evt.target === filterMarshmallows){
+      var marshmallows = window.util.goods.filter(function (good) {
+        return good.kind === 'Зефир';
+      });
+      cleanCatalog();
+      appendOnCatalog(marshmallows);
+    }
   };
 
   var onError = function (errorMassage) {
@@ -167,11 +233,17 @@
 
   window.backend.load(onSuccess, onError);
 
+  catalogSideBar.addEventListener('click', getFilters);
+  filterExpencive.addEventListener('click', function () {
+    cleanCatalog();
+  });
+
   window.catalog = {
     closeModal: closeModal,
     append: appendOnCatalog,
     render: renderGood,
-    favorite: favorites
+    favorite: favorites,
+    clean: cleanCatalog
   };
 
 })();
