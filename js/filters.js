@@ -89,8 +89,7 @@
   */
   window.filter = {
     count: filterCount,
-    sort: filterSort,
-    price: getPrice
+    sort: filterSort
   };
 
 })();
