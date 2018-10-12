@@ -7,7 +7,6 @@
 
   var min;
   var max;
-  var minMaxRange;
 
   // Кнопки ползунка
   var rangeFilter = document.querySelector('.range__filter');
@@ -48,7 +47,7 @@
     rangeBtnLeft.style.left = MIN_PRICE + 'px';
     rangeFillLine.style.right = MIN_PRICE + 'px';
     rangeFillLine.style.left = MIN_PRICE + 'px';
-  }
+  };
 
   startCoords();
 
@@ -102,5 +101,5 @@
 
   window.slider = {
     start: startCoords,
-  }
+  };
 })();

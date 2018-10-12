@@ -25,14 +25,14 @@
   var filterGum = catalogSideBar.querySelector('#filter-gum');
   var filterMarmalade = catalogSideBar.querySelector('#filter-marmalade');
   var filterMarshmallows = catalogSideBar.querySelector('#filter-marshmallows');
-
+  /*
   var filterSugarFree = catalogSideBar.querySelector('#filter-sugar-free');
   var filterVegetarian = catalogSideBar.querySelector('#filter-vegetarian');
   var filterGlutenFree = catalogSideBar.querySelector('#filter-gluten-free');
 
   var filterExpencive = document.querySelector('#filter-expensive');
   var filterCheep = document.querySelector('#filter-cheep');
-
+  */
   var favorites = [];
 
   // Количество осташихся товаров
@@ -153,12 +153,6 @@
     }
   };
 
-  var removeFromCatalog = function () {
-    while (catalogCards.firstChild) {
-      catalogCards.removeChild(catalogCards.firstChild);
-    }
-  };
-
   var toggleModal = function (isSuccess) {
     if (isSuccess) {
       success.classList.remove('modal--hidden');
@@ -191,7 +185,7 @@
   };
 
   var getFilters = function (evt) {
-    if (evt.target=== filterIcecream) {
+    if (evt.target === filterIcecream) {
       var icecream = window.util.goods.filter(function (good) {
         return good.kind === 'Мороженое';
       });
@@ -210,12 +204,12 @@
       cleanCatalog();
       appendOnCatalog(gum);
     } else if (evt.target === filterMarmalade) {
-        var marmalade = window.util.goods.filter(function (good) {
-          return good.kind === 'Мармелад';
+      var marmalade = window.util.goods.filter(function (good) {
+        return good.kind === 'Мармелад';
         });
       cleanCatalog();
       appendOnCatalog(marmalade);
-    } else if (evt.target === filterMarshmallows){
+    } else if (evt.target === filterMarshmallows) {
       var marshmallows = window.util.goods.filter(function (good) {
         return good.kind === 'Зефир';
       });
