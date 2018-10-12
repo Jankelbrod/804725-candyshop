@@ -2,8 +2,8 @@
 
 (function () {
 
-  var MAX_PRICE = 1500;
-  var MIN_PRICE = 100;
+  var MAX_PRICE = 90;
+  var MIN_PRICE = 0;
 
   // Кнопки ползунка
   var rangeFilter = document.querySelector('.range__filter');
@@ -39,6 +39,16 @@
     return coordX;
   };
 
+  function addFilterPrice(minPrice, maxPrice) {
+    arrFilterSort.prices[window.data.MIN_INDEX] = minPrice;
+    arrFilterSort.prices[window.data.MAX_INDEX] = maxPrice;
+  }
+
+  rangeBtnRight.style.right = MIN_PRICE - rangeBtnRight.offsetWidth + 'px';
+  rangeBtnLeft.style.left = MIN_PRICE + 'px';
+  rangeFillLine.style.right = MIN_PRICE + 'px';
+  rangeFillLine.style.left = MIN_PRICE + 'px';
+
   var onPinMouseDown = function (evtDown) {
     evtDown.preventDefault();
 
@@ -56,6 +66,7 @@
         evtDown.target.style.left = newCoordX - rangeBtnRight.offsetWidth + 'px';
         rangeFillLine.style.left = newCoordX + 'px';
         rangePriceMin.textContent = getPriceValue(newCoordX);
+        window.filterSort.prices = getPriceValue(newCoordX);
       }
 
       if (evtDown.target === rangeBtnRight) {
@@ -70,10 +81,13 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      window.filter();
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   };
+
+
   rangePriceMin.textContent = getPriceValue(rangeBtnLeft.offsetLeft);
   rangePriceMax.textContent = getPriceValue(rangeBtnRight.offsetLeft);
 

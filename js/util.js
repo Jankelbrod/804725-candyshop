@@ -15,6 +15,7 @@
       }
       lastTimeout = window.setTimeout(functionToDebounce, DEBOUNCE_INTERVAL);
     },
+
     // Отключаем/включаем поле оформления заказа
     disableField: function (element, isDisable) {
       var inputs = element.querySelectorAll('input');
