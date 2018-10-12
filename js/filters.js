@@ -65,14 +65,6 @@
     filterSpan[9].textContent = '(' + inStock.length + ')';
   };
 
-
-  var getPrice = function (max, min) {
-    var rangePrice = window.util.goods.filter(function (good) {
-      return good.price <= max && good.price >= min;
-      filterCountPrice.textContent = '(' + rangePrice.length + ')';
-    });
-  };
-
   var filterSort = {
     kinds: [],
     nutritionFacts: {},

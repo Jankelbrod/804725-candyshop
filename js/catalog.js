@@ -206,7 +206,7 @@
     } else if (evt.target === filterMarmalade) {
       var marmalade = window.util.goods.filter(function (good) {
         return good.kind === 'Мармелад';
-        });
+      });
       cleanCatalog();
       appendOnCatalog(marmalade);
     } else if (evt.target === filterMarshmallows) {
@@ -228,9 +228,6 @@
   window.backend.load(onSuccess, onError);
 
   catalogSideBar.addEventListener('click', getFilters);
-  filterExpencive.addEventListener('click', function () {
-    cleanCatalog();
-  });
 
   window.catalog = {
     closeModal: closeModal,
