@@ -18,6 +18,8 @@
   var success = document.querySelector('.modal--success');
   var modal = document.querySelectorAll('.modal__close');
 
+  var favorites = [];
+
   // Количество осташихся товаров
   var setAmountClass = function (amount, element) {
     element.classList.remove('card--in-stock');
@@ -77,11 +79,7 @@
     var goodName = target.querySelector('.card__title').textContent;
     return usedNames.indexOf(goodName);
   };
-  // Добавление/удаление из избранного
-  var toggleFavoriteClass = function (element) {
-    element.classList.toggle('card__btn-favorite--selected');
-    element.blur();
-  };
+
   // Функция, отрисовывающая сгенерированные товары на странице
   var renderGood = function (good) {
     var goodElement = catalogCardTemplate.cloneNode(true);
@@ -100,6 +98,19 @@
     window.basket.check();
     return goodElement;
   };
+
+  // Добавление/удаление из избранного
+  var toggleFavoriteClass = function (element) {
+    element.classList.toggle('card__btn-favorite--selected');
+    element.blur();
+    if (element.classList.contains('card__btn-favorite--selected')) {
+      favorites.push(element);
+      window.filter();
+    } else {
+      favorites = [];
+    }
+  };
+
   var checkOnCatalogClick = function (evt) {
     evt.preventDefault();
     var target = evt.target;
@@ -111,6 +122,7 @@
     }
   };
   catalogCards.addEventListener('click', checkOnCatalogClick);
+
   // Создаем товары и добавляем их на страницу
   var appendOnCatalog = function (data) {
     var fragment = document.createDocumentFragment();
@@ -141,9 +153,11 @@
     for (var i = 0; i < window.util.goods.length; i++) {
       usedNames.push(window.util.goods[i].name);
     }
+    window.filter();
     appendOnCatalog(window.util.goods);
     catalogLoad.classList.add('visually-hidden');
   };
+
   var onError = function (errorMassage) {
     toggleModal(false);
     catalogLoad.classList.remove('visually-hidden');
@@ -154,10 +168,10 @@
   window.backend.load(onSuccess, onError);
 
   window.catalog = {
-    toggleModal: toggleModal,
     closeModal: closeModal,
     append: appendOnCatalog,
-    render: renderGood
+    render: renderGood,
+    favorite: favorites
   };
 
 })();
